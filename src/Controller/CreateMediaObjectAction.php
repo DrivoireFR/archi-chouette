@@ -3,17 +3,21 @@
 namespace App\Controller;
 
 use App\Entity\MediaObject;
+use App\FileImport\ImageImportService;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
+use App\FileImport\Exception\InvalidMimeTypeException;
 use App\Repository\ProductRepository;
 
 final class CreateMediaObjectAction extends AbstractController
 {
     public function __construct(
-        ProductRepository $productRepository
+        ProductRepository $productRepository,
+        ImageImportService $imageImportService
     ) {
         $this->productRepository = $productRepository;
+        $this->imageImportService = $imageImportService;
     }
 
     public function __invoke(Request $request): MediaObject
@@ -23,6 +27,10 @@ final class CreateMediaObjectAction extends AbstractController
 
         if (!$uploadedFile) {
             throw new BadRequestHttpException('"file" is required');
+        }
+        
+        if (!$this->imageImportService->isValid($uploadedFile)) {
+            throw new InvalidMimeTypeException();
         }
 
         if (!$productId) {
