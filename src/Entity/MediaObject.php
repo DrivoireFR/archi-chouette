@@ -13,7 +13,6 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
 /**
  * @ORM\Entity
  * @ApiResource(
- *     iri="http://schema.org/MediaObject",
  *     normalizationContext={
  *         "groups"={"media_object_read"}
  *     },
@@ -21,25 +20,6 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
  *         "post"={
  *             "controller"=CreateMediaObjectAction::class,
  *             "deserialize"=false,
- *             "security"="is_granted('ROLE_USER')",
- *             "validation_groups"={"Default", "media_object_create"},
- *             "openapi_context"={
- *                 "requestBody"={
- *                     "content"={
- *                         "multipart/form-data"={
- *                             "schema"={
- *                                 "type"="object",
- *                                 "properties"={
- *                                     "file"={
- *                                         "type"="string",
- *                                         "format"="binary"
- *                                     }
- *                                 }
- *                             }
- *                         }
- *                     }
- *                 }
- *             }
  *         },
  *         "get"
  *     },
